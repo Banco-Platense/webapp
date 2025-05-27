@@ -6,8 +6,9 @@ import type { UserType } from "@/types"
 interface AuthContextType {
   user: UserType | null
   isAuthenticated: boolean
-  login: (user: UserType) => void
+  login: (userData: UserType, token: string) => void
   logout: () => void
+  token: string | null
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   login: () => {},
   logout: () => {},
+  token: null
 })
 
 export const useAuth = () => useContext(AuthContext)
@@ -25,33 +27,35 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<UserType | null>(null)
+  const [token, setToken] = useState<string | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     // Check if user is logged in from localStorage
     const storedUser = localStorage.getItem("wallet_user")
-    const token = localStorage.getItem("wallet_token")
+    const storedToken = localStorage.getItem("wallet_token")
 
-    if (storedUser && token) {
+    if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
+      setToken(storedToken)
       setIsAuthenticated(true)
     }
 
     setIsLoading(false)
   }, [])
 
-  const login = (userData: UserType) => {
-    // TODO: In a real app, this would validate the JWT token
-    // For now, we'll just store the user data and a dummy token
+  const login = (userData: UserType, authToken: string) => {
     setUser(userData)
+    setToken(authToken)
     setIsAuthenticated(true)
     localStorage.setItem("wallet_user", JSON.stringify(userData))
-    localStorage.setItem("wallet_token", "dummy-jwt-token")
+    localStorage.setItem("wallet_token", authToken)
   }
 
   const logout = () => {
     setUser(null)
+    setToken(null)
     setIsAuthenticated(false)
     localStorage.removeItem("wallet_user")
     localStorage.removeItem("wallet_token")
@@ -61,5 +65,5 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return null // or a loading spinner
   }
 
-  return <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, isAuthenticated, login, logout, token }}>{children}</AuthContext.Provider>
 }

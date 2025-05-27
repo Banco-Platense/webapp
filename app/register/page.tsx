@@ -9,17 +9,18 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { useAuth } from "@/context/auth-context"
+import { registerUser } from "@/lib/auth-service"
+import { useToast } from "@/hooks/use-toast"
 
 export default function RegisterPage() {
-  const [name, setName] = useState("")
+  const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const router = useRouter()
-  const { login } = useAuth()
+  const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,15 +34,25 @@ export default function RegisterPage() {
     }
 
     try {
-      // TODO: Replace with actual API call to backend
-      // Simulating API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Mock successful registration and login
-      login({ email, id: "user-123", name })
-      router.push("/dashboard")
+      // Call the register API
+      await registerUser({
+        email,
+        username,
+        password
+      })
+      
+      // Show success toast
+      toast({
+        title: "Registration Successful!",
+        description: "Your account has been created successfully. Please login with your credentials.",
+        variant: "default",
+      })
+      
+      // On successful registration (200 status), redirect to login page
+      router.push("/login")
     } catch (err) {
-      setError("Registration failed. Please try again.")
+      console.error("Registration error:", err)
+      setError(err instanceof Error ? err.message : "Registration failed. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -58,13 +69,13 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && <div className="p-3 text-sm bg-red-100 border border-red-400 text-red-700 rounded">{error}</div>}
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
-                id="name"
+                id="username"
                 type="text"
-                placeholder="John Doe"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                placeholder="johndoe"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
                 className="border-[#bba591]"
               />

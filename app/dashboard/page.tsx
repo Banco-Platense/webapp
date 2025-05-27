@@ -9,24 +9,32 @@ import { TransactionList } from "@/components/dashboard/transaction-list"
 import { ActionButtons } from "@/components/dashboard/action-buttons"
 import { mockTransactions } from "@/lib/mock-data"
 import type { Transaction } from "@/types"
+import { apiRequest } from "@/lib/api"
 
 export default function DashboardPage() {
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated, token } = useAuth()
   const router = useRouter()
   const [balance, setBalance] = useState(1250.75)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !token) {
       router.push("/login")
       return
     }
 
-    // TODO: Replace with actual API call to fetch balance and transactions
+    // Fetch user data using JWT token
     const fetchData = async () => {
       try {
-        // Simulate API call
+        // For now, use mock data but demonstrate how we would use the token
+        // In a real app, we would replace this with actual API calls
+        // Example:
+        // const userData = await apiRequest('/user/profile', { token });
+        // const transactionData = await apiRequest('/user/transactions', { token });
+        
+        // Simulate API call to demonstrate token usage
+        console.log("Using JWT token for authentication:", token)
         await new Promise((resolve) => setTimeout(resolve, 1000))
         setTransactions(mockTransactions)
       } catch (error) {
@@ -37,7 +45,7 @@ export default function DashboardPage() {
     }
 
     fetchData()
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router, token])
 
   if (!isAuthenticated) {
     return null
