@@ -1,4 +1,7 @@
-const API_URL = "http://localhost:8080";
+import { env } from "@/lib/env";
+
+// Use centralized environment configuration
+const API_URL = env.API_URL;
 
 interface FetchOptions extends RequestInit {
   token?: string | null;

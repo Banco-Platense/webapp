@@ -1,6 +1,8 @@
 import type { UserType } from "@/types";
+import { env } from "@/lib/env";
 
-const API_URL = "http://localhost:8080";
+// Use centralized environment configuration
+const API_URL = env.API_URL;
 
 export interface RegisterRequest {
   email: string;

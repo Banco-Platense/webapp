@@ -32,17 +32,34 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Check if user is logged in from localStorage
-    const storedUser = localStorage.getItem("wallet_user")
-    const storedToken = localStorage.getItem("wallet_token")
+    try {
+      // Check if user is logged in from localStorage
+      const storedUser = localStorage.getItem("wallet_user")
+      const storedToken = localStorage.getItem("wallet_token")
 
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser))
-      setToken(storedToken)
-      setIsAuthenticated(true)
+      if (storedUser && storedToken && storedUser !== "undefined") {
+        // Validate JSON before parsing
+        const parsedUser = JSON.parse(storedUser)
+        
+        // Validate that the parsed user has required properties
+        if (parsedUser && parsedUser.id && parsedUser.email) {
+          setUser(parsedUser)
+          setToken(storedToken)
+          setIsAuthenticated(true)
+        } else {
+          // Invalid user data, clear localStorage
+          localStorage.removeItem("wallet_user")
+          localStorage.removeItem("wallet_token")
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing stored user data:", error)
+      // Clear invalid data from localStorage
+      localStorage.removeItem("wallet_user")
+      localStorage.removeItem("wallet_token")
+    } finally {
+      setIsLoading(false)
     }
-
-    setIsLoading(false)
   }, [])
 
   const login = (userData: UserType, authToken: string) => {
