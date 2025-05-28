@@ -8,10 +8,10 @@ interface BalanceCardProps {
 
 export function BalanceCard({ balance, isLoading }: BalanceCardProps) {
   return (
-    <Card className="mb-6 border-[#bba591] bg-white">
+    <Card className="mb-6 border-taupe bg-white">
       <CardHeader className="pb-2">
         <CardDescription>Current Balance</CardDescription>
-        <CardTitle className="text-3xl font-bold text-[#0e1c4f]">
+        <CardTitle className="text-3xl font-bold text-deepbrown">
           {isLoading ? <Skeleton className="h-9 w-32" /> : `$${balance.toFixed(2)}`}
         </CardTitle>
       </CardHeader>

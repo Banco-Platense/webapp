@@ -10,9 +10,9 @@ interface TransactionListProps {
 
 export function TransactionList({ transactions, isLoading }: TransactionListProps) {
   return (
-    <Card className="mt-6 border-[#bba591] bg-white">
+    <Card className="mt-6 border-taupe bg-white">
       <CardHeader>
-        <CardTitle className="text-xl text-[#0e1c4f]">Recent Transactions</CardTitle>
+        <CardTitle className="text-xl text-deepbrown">Recent Transactions</CardTitle>
         <CardDescription>Your recent activity</CardDescription>
       </CardHeader>
       <CardContent>
@@ -35,7 +35,7 @@ export function TransactionList({ transactions, isLoading }: TransactionListProp
             {transactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-center justify-between border-b border-[#bba591]/20 pb-4 last:border-0 last:pb-0"
+                className="flex items-center justify-between border-b border-taupe/20 pb-4 last:border-0 last:pb-0"
               >
                 <div className="flex items-center">
                   <div

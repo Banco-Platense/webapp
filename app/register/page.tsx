@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label"
 import { registerUser } from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
+import Image from "next/image"
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("")
@@ -59,11 +60,21 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f3efe8] p-4">
-      <Card className="w-full max-w-md border-[#bba591]">
+    <div className="min-h-screen flex items-center justify-center bg-cream p-4">
+      <Card className="w-full max-w-md border-taupe">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-[#0e1c4f]">Create an account</CardTitle>
-          <CardDescription className="text-center">Enter your details to create your wallet account</CardDescription>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Image 
+              src="/logo.png" 
+              alt="Banco Platense Logo" 
+              width={48} 
+              height={48} 
+              className="h-12 w-12 object-contain"
+            />
+            <h1 className="text-2xl font-bold text-deepbrown">Banco Platense</h1>
+          </div>
+          <CardTitle className="text-2xl font-bold text-center text-deepbrown">Create an account</CardTitle>
+          <CardDescription className="text-center">Enter your details to create your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -77,7 +88,7 @@ export default function RegisterPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className="border-[#bba591]"
+                className="border-taupe"
               />
             </div>
             <div className="space-y-2">
@@ -89,7 +100,7 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="border-[#bba591]"
+                className="border-taupe"
               />
             </div>
             <div className="space-y-2">
@@ -100,7 +111,7 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="border-[#bba591]"
+                className="border-taupe"
               />
             </div>
             <div className="space-y-2">
@@ -111,10 +122,10 @@ export default function RegisterPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                className="border-[#bba591]"
+                className="border-taupe"
               />
             </div>
-            <Button type="submit" className="w-full bg-[#336659] hover:bg-[#336659]/90" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
               {isLoading ? "Creating account..." : "Register"}
             </Button>
           </form>
@@ -122,7 +133,7 @@ export default function RegisterPage() {
         <CardFooter className="flex justify-center">
           <div className="text-sm text-center">
             Already have an account?{" "}
-            <Link href="/login" className="text-[#336659] hover:underline">
+            <Link href="/login" className="text-mediumbrown hover:underline">
               Login
             </Link>
           </div>

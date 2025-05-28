@@ -9,9 +9,9 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Wallet App",
-  description: "A simple wallet application",
-    generator: 'v0.dev'
+  title: "Banco Platense",
+  description: "Sistema bancario digital de Banco Platense",
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({

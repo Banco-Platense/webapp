@@ -51,16 +51,16 @@ export default function SendMoneyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f3efe8] p-4">
+    <div className="min-h-screen bg-cream p-4">
       <div className="container mx-auto max-w-md">
         <Button variant="ghost" className="mb-4" onClick={() => router.push("/dashboard")}>
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
         </Button>
 
-        <Card className="border-[#bba591]">
+        <Card className="border-taupe">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center text-[#0e1c4f]">Send Money</CardTitle>
-            <CardDescription className="text-center">Transfer funds to another wallet user</CardDescription>
+            <CardTitle className="text-2xl font-bold text-center text-deepbrown">Send Money</CardTitle>
+            <CardDescription className="text-center">Transfer funds to another account holder</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -76,7 +76,7 @@ export default function SendMoneyPage() {
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
                   required
-                  className="border-[#bba591]"
+                  className="border-taupe"
                 />
               </div>
               <div className="space-y-2">
@@ -92,7 +92,7 @@ export default function SendMoneyPage() {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     required
-                    className="pl-7 border-[#bba591]"
+                    className="pl-7 border-taupe"
                   />
                 </div>
               </div>
@@ -104,10 +104,10 @@ export default function SendMoneyPage() {
                   placeholder="What's this for?"
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  className="border-[#bba591]"
+                  className="border-taupe"
                 />
               </div>
-              <Button type="submit" className="w-full bg-[#336659] hover:bg-[#336659]/90" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
                 {isLoading ? "Processing..." : "Send Money"}
               </Button>
             </form>

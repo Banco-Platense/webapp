@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@/context/auth-context"
 import { loginUser } from "@/lib/auth-service"
+import Image from "next/image"
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -46,11 +47,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f3efe8] p-4">
-      <Card className="w-full max-w-md border-[#bba591]">
+    <div className="min-h-screen flex items-center justify-center bg-cream p-4">
+      <Card className="w-full max-w-md border-taupe">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-[#0e1c4f]">Login</CardTitle>
-          <CardDescription className="text-center">Enter your credentials to access your wallet</CardDescription>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Image 
+              src="/logo.png" 
+              alt="Banco Platense Logo" 
+              width={48} 
+              height={48} 
+              className="h-12 w-12 object-contain"
+            />
+            <h1 className="text-2xl font-bold text-deepbrown">Banco Platense</h1>
+          </div>
+          <CardTitle className="text-2xl font-bold text-center text-deepbrown">Login</CardTitle>
+          <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -64,13 +75,13 @@ export default function LoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className="border-[#bba591]"
+                className="border-taupe"
               />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link href="#" className="text-sm text-[#336659] hover:underline">
+                <Link href="#" className="text-sm text-mediumbrown hover:underline">
                   Forgot password?
                 </Link>
               </div>
@@ -80,10 +91,10 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="border-[#bba591]"
+                className="border-taupe"
               />
             </div>
-            <Button type="submit" className="w-full bg-[#336659] hover:bg-[#336659]/90" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
               {isLoading ? "Logging in..." : "Login"}
             </Button>
           </form>
@@ -91,7 +102,7 @@ export default function LoginPage() {
         <CardFooter className="flex justify-center">
           <div className="text-sm text-center">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-[#336659] hover:underline">
+            <Link href="/register" className="text-mediumbrown hover:underline">
               Register
             </Link>
           </div>

@@ -53,12 +53,13 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom colors based on provided hex codes
-        cream: "#f3efe8",
-        taupe: "#bba591",
-        lightyellow: "#faecc3",
-        teal: "#336659",
-        darkblue: "#0e1c4f",
+        // Custom colors based on Banco Platense logo - brown/taupe theme
+        cream: "#f8f5f0",
+        lightbrown: "#e8ddd0", 
+        taupe: "#c4a888",
+        mediumbrown: "#a67c5a",
+        darkbrown: "#7a5a3e",
+        deepbrown: "#5d4430",
       },
       borderRadius: {
         lg: "var(--radius)",

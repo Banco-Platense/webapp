@@ -51,16 +51,16 @@ export default function AddMoneyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f3efe8] p-4">
+    <div className="min-h-screen bg-cream p-4">
       <div className="container mx-auto max-w-md">
         <Button variant="ghost" className="mb-4" onClick={() => router.push("/dashboard")}>
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
         </Button>
 
-        <Card className="border-[#bba591]">
+        <Card className="border-taupe">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center text-[#0e1c4f]">Add Money</CardTitle>
-            <CardDescription className="text-center">Add funds to your wallet from external sources</CardDescription>
+            <CardTitle className="text-2xl font-bold text-center text-deepbrown">Add Money</CardTitle>
+            <CardDescription className="text-center">Add funds to your account from external sources</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -80,26 +80,26 @@ export default function AddMoneyPage() {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     required
-                    className="pl-7 border-[#bba591]"
+                    className="pl-7 border-taupe"
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Source</Label>
                 <RadioGroup value={source} onValueChange={setSource} className="flex flex-col space-y-2">
-                  <div className="flex items-center space-x-2 rounded-md border p-3 border-[#bba591]">
+                  <div className="flex items-center space-x-2 rounded-md border p-3 border-taupe">
                     <RadioGroupItem value="card" id="card" />
                     <Label htmlFor="card" className="flex-1 cursor-pointer">
                       Credit/Debit Card
                     </Label>
                   </div>
-                  <div className="flex items-center space-x-2 rounded-md border p-3 border-[#bba591]">
+                  <div className="flex items-center space-x-2 rounded-md border p-3 border-taupe">
                     <RadioGroupItem value="bank" id="bank" />
                     <Label htmlFor="bank" className="flex-1 cursor-pointer">
                       Bank Account
                     </Label>
                   </div>
-                  <div className="flex items-center space-x-2 rounded-md border p-3 border-[#bba591]">
+                  <div className="flex items-center space-x-2 rounded-md border p-3 border-taupe">
                     <RadioGroupItem value="debin" id="debin" />
                     <Label htmlFor="debin" className="flex-1 cursor-pointer">
                       DEBIN Request
@@ -107,7 +107,7 @@ export default function AddMoneyPage() {
                   </div>
                 </RadioGroup>
               </div>
-              <Button type="submit" className="w-full bg-[#336659] hover:bg-[#336659]/90" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
                 {isLoading ? "Processing..." : "Add Money"}
               </Button>
             </form>
