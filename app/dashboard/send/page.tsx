@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React, {useEffect} from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -10,20 +10,25 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@/context/auth-context"
+import {apiRequest} from "@/lib/api";
 
 export default function SendMoneyPage() {
   const [recipient, setRecipient] = useState("")
   const [amount, setAmount] = useState("")
   const [note, setNote] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const router = useRouter()
-  const { isAuthenticated } = useAuth()
+  const { token, isAuthenticated } = useAuth()
 
   // Redirect if not authenticated
   if (typeof window !== "undefined" && !isAuthenticated) {
     router.push("/login")
   }
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,10 +41,9 @@ export default function SendMoneyPage() {
       return
     }
 
+    const transactionData = {amount, description: note, receiverWalletId: recipient}
     try {
-      // TODO: Replace with actual API call to send money
-      // Simulating API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await apiRequest(`/wallets/transactions/p2p`, {token, method: "POST", body: JSON.stringify(transactionData)})
 
       // Mock successful transfer
       router.push("/dashboard")
@@ -72,7 +76,7 @@ export default function SendMoneyPage() {
                 <Input
                   id="recipient"
                   type="text"
-                  placeholder="email@example.com or user-id"
+                  placeholder="recipient walletId"
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
                   required
