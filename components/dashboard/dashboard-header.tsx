@@ -11,12 +11,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import type { UserType } from "@/types"
 import Image from "next/image"
 
-interface DashboardHeaderProps {
-  user: UserType | null
-}
-
-export function DashboardHeader({ user }: DashboardHeaderProps) {
-  const { logout } = useAuth()
+export function DashboardHeader() {
+  const { user, logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleLogout = () => {
@@ -103,14 +99,14 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8 bg-lightbrown text-deepbrown">
-                <AvatarFallback>{user?.name ? getInitials(user.name) : "U"}</AvatarFallback>
+                <AvatarFallback>{user?.username ? getInitials(user.username) : "U"}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56 bg-cream border-taupe">
             <DropdownMenuItem className="cursor-default">
               <User className="mr-2 h-4 w-4" />
-              <span>{user?.name || "User"}</span>
+              <span>{user?.username || "User"}</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />

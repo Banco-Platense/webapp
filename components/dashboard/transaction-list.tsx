@@ -2,13 +2,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton"
 import { ArrowDownLeft, ArrowUpRight } from "lucide-react"
 import type { Transaction } from "@/types"
+import {use, useEffect} from "react";
 
 interface TransactionListProps {
   transactions: Transaction[]
+  walletId: string
   isLoading: boolean
 }
 
-export function TransactionList({ transactions, isLoading }: TransactionListProps) {
+// TODO show more data, like receiver/sender
+export function TransactionList({ transactions, walletId, isLoading }: TransactionListProps) {
+    useEffect(() => {
+
+    }, []);
+
+  const isGreenTransaction = (transaction: Transaction) => {
+      return transaction.type === "EXTERNAL_DEBIN" || transaction.type === "EXTERNAL_TOPUP" || transaction.receiverWalletId === walletId
+  }
   return (
     <Card className="mt-6 border-taupe bg-white">
       <CardHeader>
@@ -40,10 +50,10 @@ export function TransactionList({ transactions, isLoading }: TransactionListProp
                 <div className="flex items-center">
                   <div
                     className={`mr-3 p-2 rounded-full ${
-                      transaction.type === "income" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                      isGreenTransaction(transaction) ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                     }`}
                   >
-                    {transaction.type === "income" ? (
+                    {isGreenTransaction(transaction) ? (
                       <ArrowDownLeft className="h-4 w-4" />
                     ) : (
                       <ArrowUpRight className="h-4 w-4" />
@@ -51,11 +61,11 @@ export function TransactionList({ transactions, isLoading }: TransactionListProp
                   </div>
                   <div>
                     <p className="font-medium">{transaction.description}</p>
-                    <p className="text-xs text-muted-foreground">{new Date(transaction.date).toLocaleString()}</p>
+                    <p className="text-xs text-muted-foreground">{new Date(transaction.timestamp).toLocaleString()}</p>
                   </div>
                 </div>
-                <div className={`font-medium ${transaction.type === "income" ? "text-green-700" : "text-red-700"}`}>
-                  {transaction.type === "income" ? "+" : "-"}${transaction.amount.toFixed(2)}
+                <div className={`font-medium ${isGreenTransaction(transaction) ? "text-green-700" : "text-red-700"}`}>
+                  {isGreenTransaction(transaction) ? "+" : "-"}${transaction.amount.toFixed(2)}
                 </div>
               </div>
             ))}

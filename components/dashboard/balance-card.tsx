@@ -3,10 +3,11 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 interface BalanceCardProps {
   balance: number
+  walletId: string
   isLoading: boolean
 }
 
-export function BalanceCard({ balance, isLoading }: BalanceCardProps) {
+export function BalanceCard({ balance, walletId, isLoading }: BalanceCardProps) {
   return (
     <Card className="mb-6 border-taupe bg-white">
       <CardHeader className="pb-2">
@@ -18,6 +19,9 @@ export function BalanceCard({ balance, isLoading }: BalanceCardProps) {
       <CardContent>
         <p className="text-sm text-muted-foreground">
           Last updated: {isLoading ? <Skeleton className="h-4 w-36 inline-block" /> : new Date().toLocaleDateString()}
+        </p>
+        <p>
+          WalletId: {walletId}
         </p>
       </CardContent>
     </Card>
