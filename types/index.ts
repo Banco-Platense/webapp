@@ -1,13 +1,21 @@
 export interface UserType {
   id: string
-  name: string
+  username: string
   email: string
 }
 
 export interface Transaction {
   id: string
-  type: "income" | "expense"
+  type: "P2P" | "EXTERNAL_DEBIN" | "EXTERNAL_TOPUP"
   amount: number
   description: string
-  date: string
+  timestamp: string
+  receiverWalletId: string
+  senderWalletId: string
+}
+
+export interface Wallet {
+  id: string
+  userId: string,
+  balance: number,
 }

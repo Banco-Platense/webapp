@@ -7,14 +7,13 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { BalanceCard } from "@/components/dashboard/balance-card"
 import { TransactionList } from "@/components/dashboard/transaction-list"
 import { ActionButtons } from "@/components/dashboard/action-buttons"
-import { mockTransactions } from "@/lib/mock-data"
-import type { Transaction } from "@/types"
+import type {Transaction, Wallet} from "@/types"
 import { apiRequest } from "@/lib/api"
 
 export default function DashboardPage() {
-  const { user, isAuthenticated, token } = useAuth()
+  const { user , isAuthenticated, token } = useAuth()
   const router = useRouter()
-  const [balance, setBalance] = useState(1250.75)
+  const [wallet, setWallet] = useState<Wallet>({id: "", balance: 0, userId: ""})
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -27,16 +26,12 @@ export default function DashboardPage() {
     // Fetch user data using JWT token
     const fetchData = async () => {
       try {
-        // For now, use mock data but demonstrate how we would use the token
-        // In a real app, we would replace this with actual API calls
-        // Example:
-        // const userData = await apiRequest('/user/profile', { token });
-        // const transactionData = await apiRequest('/user/transactions', { token });
-        
-        // Simulate API call to demonstrate token usage
-        console.log("Using JWT token for authentication:", token)
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        setTransactions(mockTransactions)
+        const wallet: Wallet = await apiRequest("/wallets/user", {token})
+        setWallet(wallet)
+
+        const transactions: Transaction[] = await apiRequest(`/wallets/transactions`, {token})
+
+        setTransactions(transactions)
       } catch (error) {
         console.error("Failed to fetch wallet data", error)
       } finally {
@@ -53,11 +48,11 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-cream">
-      <DashboardHeader user={user} />
+      <DashboardHeader />
       <main className="container mx-auto px-4 py-6 max-w-4xl">
-        <BalanceCard balance={balance} isLoading={isLoading} />
+        <BalanceCard balance={wallet.balance} walletId={wallet.id} isLoading={isLoading} />
         <ActionButtons />
-        <TransactionList transactions={transactions} isLoading={isLoading} />
+        <TransactionList transactions={transactions} walletId={wallet.id} isLoading={isLoading} />
       </main>
     </div>
   )

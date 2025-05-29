@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React, {useEffect} from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -11,19 +11,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useAuth } from "@/context/auth-context"
+import {apiRequest} from "@/lib/api";
 
 export default function AddMoneyPage() {
   const [amount, setAmount] = useState("")
   const [source, setSource] = useState("card")
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const router = useRouter()
-  const { isAuthenticated } = useAuth()
+  const { token, isAuthenticated } = useAuth()
 
   // Redirect if not authenticated
   if (typeof window !== "undefined" && !isAuthenticated) {
     router.push("/login")
   }
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,9 +42,8 @@ export default function AddMoneyPage() {
     }
 
     try {
-      // TODO: Replace with actual API call to add money
-      // Simulating API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const transactionData = {amount, description: source, externalWalletInfo: source}
+      await apiRequest(`/wallets/transactions/topup`, {token, method: "POST", body: JSON.stringify(transactionData)})
 
       // Mock successful addition
       router.push("/dashboard")
