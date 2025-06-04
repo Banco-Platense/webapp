@@ -67,7 +67,7 @@ export default function AddMoneyPage() {
             <CardDescription className="text-center">Add funds to your account from external sources</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form noValidate onSubmit={handleSubmit} className="space-y-4">
               {error && (
                 <div className="p-3 text-sm bg-red-100 border border-red-400 text-red-700 rounded">{error}</div>
               )}
