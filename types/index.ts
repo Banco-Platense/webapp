@@ -4,6 +4,12 @@ export interface UserType {
   email: string
 }
 
+export interface UserData {
+  username: string
+  id: string
+  email: string
+}
+
 export interface Transaction {
   id: string
   type: "P2P" | "EXTERNAL_DEBIN" | "EXTERNAL_TOPUP"
@@ -12,6 +18,9 @@ export interface Transaction {
   timestamp: string
   receiverWalletId: string
   senderWalletId: string
+  // Optional fields for displaying usernames
+  senderUsername?: string
+  receiverUsername?: string
 }
 
 export interface Wallet {

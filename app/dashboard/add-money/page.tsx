@@ -16,6 +16,7 @@ import {apiRequest} from "@/lib/api";
 export default function AddMoneyPage() {
   const [amount, setAmount] = useState("")
   const [source, setSource] = useState("card")
+  const [externalWalletId, setExternalWalletId] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const router = useRouter()
@@ -38,6 +39,32 @@ export default function AddMoneyPage() {
     if (Number.parseFloat(amount) <= 0) {
       setError("Please enter a valid amount")
       setIsLoading(false)
+      return
+    }
+
+    if (source === "debin") {
+      if (!externalWalletId) {
+        setError("Please enter a wallet ID")
+        setIsLoading(false)
+        return
+      }
+      try {
+        // Delegate DEBIN to API, which calls the external mock internally
+        await apiRequest(`/wallets/transactions/debin`, {
+          token,
+          method: "POST",
+          body: JSON.stringify({
+            amount: Number.parseFloat(amount),
+            description: externalWalletId,
+            externalWalletInfo: externalWalletId,
+          }),
+        })
+        router.push("/dashboard")
+      } catch (err: any) {
+        setError(err.message || "Failed to create DEBIN transaction. Please try again.")
+      } finally {
+        setIsLoading(false)
+      }
       return
     }
 
@@ -111,6 +138,20 @@ export default function AddMoneyPage() {
                   </div>
                 </RadioGroup>
               </div>
+              {source === "debin" && (
+                <div className="space-y-2">
+                  <Label htmlFor="walletId">Wallet ID</Label>
+                  <Input
+                    id="walletId"
+                    type="text"
+                    placeholder="Enter external wallet ID"
+                    value={externalWalletId}
+                    onChange={(e) => setExternalWalletId(e.target.value)}
+                    required
+                    className="border-taupe"
+                  />
+                </div>
+              )}
               <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
                 {isLoading ? "Processing..." : "Add Money"}
               </Button>
