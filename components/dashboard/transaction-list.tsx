@@ -87,6 +87,14 @@ export function TransactionList({ transactions, walletId, isLoading }: Transacti
   }
 
   const getTransactionDisplayText = (transaction: EnhancedTransaction) => {
+    if (transaction.type === "EXTERNAL_DEBIN") {
+      return "Debin"
+    }
+    
+    if (transaction.type === "EXTERNAL_TOPUP") {
+      return "Top-up"
+    }
+    
     if (transaction.type === "P2P") {
       const isReceiving = transaction.receiverWalletId === walletId
       
