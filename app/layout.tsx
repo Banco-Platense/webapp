@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Banco Platense",
   description: "Sistema bancario digital de Banco Platense",
-  generator: 'v0.dev'
+  generator: 'dev'
 }
 
 export default function RootLayout({
