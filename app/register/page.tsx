@@ -77,7 +77,7 @@ export default function RegisterPage() {
           <CardDescription className="text-center">Enter your details to create your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form noValidate onSubmit={handleSubmit} className="space-y-4">
             {error && <div className="p-3 text-sm bg-red-100 border border-red-400 text-red-700 rounded">{error}</div>}
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
