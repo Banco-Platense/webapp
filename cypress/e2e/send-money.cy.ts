@@ -36,4 +36,35 @@ describe('Send Money Page', () => {
     cy.wait('@sendRequest');
     cy.url().should('include', '/dashboard');
   });
+
+  it('shows error on negative amount', () => {
+    cy.get('#recipient').type('recipient-id');
+    cy.get('#amount').type('-25');
+    cy.get('button[type="submit"]').click();
+    cy.contains('Please enter a valid amount').should('be.visible');
+  });
+
+  it('allows sending without a note', () => {
+    cy.intercept('POST', '**/wallets/transactions/p2p', {
+      statusCode: 200,
+      body: {}
+    }).as('sendRequestNoNote');
+    cy.get('#recipient').type('recipient-id');
+    cy.get('#amount').type('25');
+    cy.get('button[type="submit"]').click();
+    cy.wait('@sendRequestNoNote');
+    cy.url().should('include', '/dashboard');
+  });
+
+  it('shows error on server 500 response', () => {
+    cy.intercept('POST', '**/wallets/transactions/p2p', {
+      statusCode: 500,
+      body: {}
+    }).as('sendError500');
+    cy.get('#recipient').type('recipient-id');
+    cy.get('#amount').type('25');
+    cy.get('button[type="submit"]').click();
+    cy.wait('@sendError500');
+    cy.contains('Transfer failed. Please try again.').should('be.visible');
+  });
 }); 

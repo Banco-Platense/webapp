@@ -49,4 +49,42 @@ describe('Register Page', () => {
       'Your account has been created successfully. Please login with your credentials.'
     ).should('be.visible');
   });
+
+  it('shows error on server 500 response', () => {
+    cy.intercept('POST', '**/auth/register', {
+      statusCode: 500,
+      body: { message: 'Server error' }
+    }).as('registerServerError');
+    cy.get('#username').type('testuser');
+    cy.get('#email').type('test@example.com');
+    cy.get('#password').type('password123');
+    cy.get('#confirmPassword').type('password123');
+    cy.get('button[type="submit"]').click();
+    cy.wait('@registerServerError');
+    cy.get('.p-3').should('contain.text', 'Server error');
+  });
+
+  it('shows error on network failure', () => {
+    cy.intercept('POST', '**/auth/register', { forceNetworkError: true }).as('registerNetworkError');
+    cy.get('#username').type('testuser');
+    cy.get('#email').type('test@example.com');
+    cy.get('#password').type('password123');
+    cy.get('#confirmPassword').type('password123');
+    cy.get('button[type="submit"]').click();
+    cy.get('.p-3').should('be.visible');
+  });
+
+  it('shows error on invalid email format', () => {
+    cy.intercept('POST', '**/auth/register', {
+      statusCode: 400,
+      body: { message: 'Invalid email format' }
+    }).as('registerEmailFormatError');
+    cy.get('#username').type('testuser');
+    cy.get('#email').type('invalid-email');
+    cy.get('#password').type('password123');
+    cy.get('#confirmPassword').type('password123');
+    cy.get('button[type="submit"]').click();
+    cy.wait('@registerEmailFormatError');
+    cy.get('.p-3').should('contain.text', 'Invalid email format');
+  });
 }); 
