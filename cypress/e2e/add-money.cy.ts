@@ -23,6 +23,35 @@ describe('Add Money Page', () => {
     cy.contains('Please enter a valid amount').should('be.visible');
   });
 
+  it('shows error on negative amount', () => {
+    cy.get('input#amount').type('-10');
+    cy.get('button[type="submit"]').click();
+    cy.contains('Please enter a valid amount').should('be.visible');
+  });
+
+  it('shows error on server 400 response', () => {
+    cy.intercept('POST', '**/wallets/transactions/topup', {
+      statusCode: 400,
+      body: { message: 'Invalid topup amount' }
+    }).as('topupError');
+    cy.get('input#amount').type('50');
+    cy.get('button[type="submit"]').click();
+    cy.wait('@topupError');
+    cy.contains('Failed to add money. Please try again.').should('be.visible');
+    cy.url().should('include', '/dashboard/add-money');
+  });
+
+  it('shows error on server 500 response', () => {
+    cy.intercept('POST', '**/wallets/transactions/topup', {
+      statusCode: 500,
+      body: {}
+    }).as('topupError500');
+    cy.get('input#amount').type('50');
+    cy.get('button[type="submit"]').click();
+    cy.wait('@topupError500');
+    cy.contains('Failed to add money. Please try again.').should('be.visible');
+  });
+
   it('redirects to dashboard on successful top-up', () => {
     cy.intercept('POST', '**/wallets/transactions/topup', {
       statusCode: 200,
