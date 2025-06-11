@@ -70,9 +70,12 @@ export default function AddMoneyPage() {
 
     try {
       const transactionData = {amount, description: source, externalWalletInfo: source}
-      await apiRequest(`/wallets/transactions/topup`, {token, method: "POST", body: JSON.stringify(transactionData)})
+      if (source === "debin") {
+        await apiRequest(`/wallets/transactions/debin`, {token, method: "POST", body: JSON.stringify(transactionData)})
+      } else {
+        await apiRequest(`/wallets/transactions/topup`, {token, method: "POST", body: JSON.stringify(transactionData)})
+      }
 
-      // Mock successful addition
       router.push("/dashboard")
     } catch (err) {
       setError("Failed to add money. Please try again.")
