@@ -123,7 +123,7 @@ export default function RegisterPage() {
                 className="border-taupe"
               />
             </div>
-            <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-gradient-to-r from-mediumbrown to-darkgold hover:from-mediumbrown/90 hover:to-richgold border border-gold/20" disabled={isLoading}>
               {isLoading ? "Creating account..." : "Register"}
             </Button>
           </form>
@@ -131,7 +131,7 @@ export default function RegisterPage() {
         <CardFooter className="flex justify-center">
           <div className="text-sm text-center">
             Already have an account?{" "}
-            <Link href="/login" className="text-mediumbrown hover:underline">
+            <Link href="/login" className="text-darkgold hover:text-gold hover:underline transition-colors duration-200">
               Login
             </Link>
           </div>

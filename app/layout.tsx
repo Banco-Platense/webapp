@@ -11,7 +11,12 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Banco Platense",
   description: "Sistema bancario digital de Banco Platense",
-  generator: 'dev'
+  generator: 'v0.dev',
+  icons: {
+    icon: '/logo.ico',
+    shortcut: '/logo.ico',
+    apple: '/logo.ico',
+  }
 }
 
 export default function RootLayout({

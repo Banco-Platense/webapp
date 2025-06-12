@@ -28,7 +28,7 @@ export function DashboardHeader() {
   }
 
   return (
-    <header className="bg-darkbrown text-white shadow-md">
+    <header className="bg-gradient-to-r from-darkbrown via-darkbrown to-darkgold text-white shadow-md border-b-2 border-gold/30">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -41,28 +41,28 @@ export function DashboardHeader() {
               <div className="flex flex-col gap-4 mt-8">
                 <Link
                   href="/dashboard"
-                  className="px-4 py-2 rounded-md hover:bg-lightbrown text-deepbrown"
+                  className="px-4 py-2 rounded-md hover:bg-gradient-to-r hover:from-lightgold hover:to-gold/20 text-deepbrown transition-all duration-200"
                   onClick={() => setIsOpen(false)}
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/dashboard/send"
-                  className="px-4 py-2 rounded-md hover:bg-lightbrown text-deepbrown"
+                  className="px-4 py-2 rounded-md hover:bg-gradient-to-r hover:from-lightgold hover:to-gold/20 text-deepbrown transition-all duration-200"
                   onClick={() => setIsOpen(false)}
                 >
                   Send Money
                 </Link>
                 <Link
                   href="/dashboard/add-money"
-                  className="px-4 py-2 rounded-md hover:bg-lightbrown text-deepbrown"
+                  className="px-4 py-2 rounded-md hover:bg-gradient-to-r hover:from-lightgold hover:to-gold/20 text-deepbrown transition-all duration-200"
                   onClick={() => setIsOpen(false)}
                 >
                   Add Money
                 </Link>
                 <Button
                   variant="ghost"
-                  className="justify-start px-4 text-deepbrown hover:bg-lightbrown"
+                  className="justify-start px-4 text-deepbrown hover:bg-gradient-to-r hover:from-lightgold hover:to-gold/20 transition-all duration-200"
                   onClick={handleLogout}
                 >
                   <LogOut className="mr-2 h-4 w-4" />
@@ -84,13 +84,13 @@ export function DashboardHeader() {
         </div>
 
         <nav className="hidden md:flex items-center space-x-4">
-          <Link href="/dashboard" className="hover:text-lightbrown">
+          <Link href="/dashboard" className="hover:text-gold transition-colors duration-200">
             Dashboard
           </Link>
-          <Link href="/dashboard/send" className="hover:text-lightbrown">
+          <Link href="/dashboard/send" className="hover:text-gold transition-colors duration-200">
             Send Money
           </Link>
-          <Link href="/dashboard/add-money" className="hover:text-lightbrown">
+          <Link href="/dashboard/add-money" className="hover:text-gold transition-colors duration-200">
             Add Money
           </Link>
         </nav>
