@@ -23,6 +23,9 @@ export default function SendMoneyPage() {
   const router = useRouter()
   const { token, isAuthenticated } = useAuth()
 
+  // UUID regex pattern
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
   // Redirect if not authenticated
   if (typeof window !== "undefined" && !isAuthenticated) {
     router.push("/login")
@@ -31,6 +34,17 @@ export default function SendMoneyPage() {
   useEffect(() => {
     setIsLoading(false)
   }, [token]);
+
+  // Auto-detect recipient type based on UUID format
+  useEffect(() => {
+    if (recipient.trim()) {
+      if (uuidRegex.test(recipient.trim())) {
+        setRecipientType("walletId")
+      } else {
+        setRecipientType("username")
+      }
+    }
+  }, [recipient, uuidRegex])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -82,17 +96,21 @@ export default function SendMoneyPage() {
                 <div className="p-3 text-sm bg-red-100 border border-red-400 text-red-700 rounded">{error}</div>
               )}
               <div className="space-y-2">
-                <Label>Recipient Type</Label>
-                <Label htmlFor="recipient">Recipient Email or ID</Label>
+                <Label htmlFor="recipient">Recipient</Label>
                 <Input
                   id="recipient"
                   type="text"
-                  placeholder="recipient walletId"
+                  placeholder={"recipient walletId or username"}
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
                   required
                   className="border-taupe"
                 />
+                {recipient && (
+                  <p className="text-sm text-gray-600">
+                    Detected as: {recipientType === "walletId" ? "Wallet ID (UUID format)" : "Username"}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="amount">Amount</Label>
