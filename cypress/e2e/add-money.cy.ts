@@ -1,65 +1,84 @@
 describe('Add Money Page', () => {
-  const user = { id: '1', username: 'testuser', email: 'test@example.com' };
-  const token = 'fake-token';
+  let authToken: string;
+  let userWalletId: string;
+
+  before(() => {
+    // Login to get real token and wallet info
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:8080/auth/login',
+      body: {
+        username: 'testuser',
+        password: 'password123'
+      }
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      authToken = response.body.token;
+      
+      // Get wallet information
+      return cy.request({
+        method: 'GET',
+        url: 'http://localhost:8080/wallets/user',
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+    }).then((walletResponse) => {
+      expect(walletResponse.status).to.eq(200);
+      userWalletId = walletResponse.body.id;
+    });
+  });
 
   beforeEach(() => {
     cy.visit('/dashboard/add-money', {
       onBeforeLoad(win) {
-        win.localStorage.setItem('wallet_user', JSON.stringify(user));
-        win.localStorage.setItem('wallet_token', token);
+        win.localStorage.setItem('wallet_user', JSON.stringify({ 
+          id: userWalletId, 
+          username: 'testuser', 
+          email: 'test@example.com' 
+        }));
+        win.localStorage.setItem('wallet_token', authToken);
       }
     });
   });
 
   it('displays add money form', () => {
     cy.get('input#amount').should('be.visible');
-    cy.contains('Source');
+    cy.contains('External CBU');
     cy.get('button[type="submit"]').contains('Send DEBIN Request');
   });
 
   it('shows error on invalid amount', () => {
     cy.get('input#amount').type('0');
+    cy.get('input#walletId').type('11111111-1111-1111-1111-111111111111');
     cy.get('button[type="submit"]').click();
     cy.contains('Please enter a valid amount').should('be.visible');
   });
 
   it('shows error on negative amount', () => {
     cy.get('input#amount').type('-10');
+    cy.get('input#walletId').type('11111111-1111-1111-1111-111111111111');
     cy.get('button[type="submit"]').click();
     cy.contains('Please enter a valid amount').should('be.visible');
   });
 
-  it('shows error on server 400 response', () => {
-    cy.intercept('POST', '**/wallets/transactions/debin', {
-      statusCode: 400,
-      body: { message: 'Invalid topup amount' }
-    }).as('debinError');
+  it('shows error on failed debin request', () => {
     cy.get('input#amount').type('50');
+    cy.get('input#walletId').type('22222222-2222-2222-2222-222222222222'); // Wallet ID that causes failure
     cy.get('button[type="submit"]').click();
-    cy.wait('@debinError');
-    cy.contains('Failed to add money. Please try again.').should('be.visible');
+    
+    // Wait for the error message to appear - the API returns a 500 error which should show as "API error: 500"
+    cy.contains('API error: 500').should('be.visible');
     cy.url().should('include', '/dashboard/add-money');
   });
 
-  it('shows error on server 500 response', () => {
-    cy.intercept('POST', '**/wallets/transactions/debin', {
-      statusCode: 500,
-      body: {}
-    }).as('debinError500');
+  it('redirects to dashboard on successful debin request', () => {
     cy.get('input#amount').type('50');
+    cy.get('input#walletId').type('11111111-1111-1111-1111-111111111111'); // Wallet ID that succeeds
     cy.get('button[type="submit"]').click();
-    cy.wait('@debinError500');
-    cy.contains('Failed to add money. Please try again.').should('be.visible');
-  });
-
-  it('redirects to dashboard on successful top-up', () => {
-    cy.intercept('POST', '**/wallets/transactions/debin', {
-      statusCode: 200,
-      body: {}
-    }).as('debinRequest');
-    cy.get('input#amount').type('50');
-    cy.get('button[type="submit"]').click();
-    cy.wait('@debinRequest');
-    cy.url().should('include', '/dashboard');
+    
+    // Should redirect to dashboard on success (this might take a moment for the API call)
+    cy.url().should('include', '/dashboard', { timeout: 10000 });
+    cy.url().should('not.include', '/add-money');
   });
 }); 

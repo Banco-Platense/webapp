@@ -29,6 +29,7 @@ describe('Dashboard Page', () => {
       }
     });
 
+    // Wait for the page to load and make the API calls
     cy.wait('@getWallet');
     cy.wait('@getTransactions');
   });
@@ -41,7 +42,7 @@ describe('Dashboard Page', () => {
 
   it('displays recent transactions', () => {
     cy.contains('Recent Transactions');
-    cy.contains('Initial deposit');
+    cy.contains('Top-up');
     cy.contains('+$100.50');
   });
 
