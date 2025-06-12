@@ -3,33 +3,41 @@
 @tailwind utilities;
 
 :root {
-  --background: 39 22% 93%;
-  --foreground: 222 71% 18%;
+  /* Main background: warm white/cream */
+  --background: 0 0% 100%;
+  --foreground: 26 36% 23%;
 
-  --card: 39 22% 93%;
-  --card-foreground: 222 71% 18%;
+  /* Cards: white with brown text */
+  --card: 0 0% 100%;
+  --card-foreground: 26 36% 23%;
 
-  --popover: 39 22% 93%;
-  --popover-foreground: 222 71% 18%;
+  /* Popovers: white background */
+  --popover: 0 0% 100%;
+  --popover-foreground: 26 36% 23%;
 
-  --primary: 167 33% 30%;
+  /* Primary: rich brown */
+  --primary: 26 36% 23%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 25 20% 65%;
-  --secondary-foreground: 222 71% 18%;
+  /* Secondary: light brown/taupe */
+  --secondary: 28 25% 72%;
+  --secondary-foreground: 26 36% 23%;
 
-  --muted: 25 20% 65%;
-  --muted-foreground: 222 47% 25%;
+  /* Muted: light brown */
+  --muted: 31 44% 85%;
+  --muted-foreground: 26 26% 35%;
 
-  --accent: 43 89% 87%;
-  --accent-foreground: 222 71% 18%;
+  /* Accent: gold highlights */
+  --accent: 45 93% 47%;
+  --accent-foreground: 26 36% 23%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 25 20% 65%;
-  --input: 25 20% 65%;
-  --ring: 222 71% 18%;
+  /* Borders: light brown */
+  --border: 28 25% 72%;
+  --input: 28 25% 72%;
+  --ring: 45 93% 47%;
 
   --radius: 0.5rem;
 }

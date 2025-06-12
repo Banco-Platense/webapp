@@ -53,13 +53,19 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom colors based on Banco Platense logo - brown/taupe theme
+        // Custom colors based on Banco Platense logo - brown/white/gold theme
         cream: "#f8f5f0",
+        white: "#ffffff",
         lightbrown: "#e8ddd0", 
         taupe: "#c4a888",
         mediumbrown: "#a67c5a",
         darkbrown: "#7a5a3e",
         deepbrown: "#5d4430",
+        // Gold accent colors for streaks and highlights
+        lightgold: "#f5e6a3",
+        gold: "#d4af37",
+        darkgold: "#b8941f",
+        richgold: "#9c7a00",
       },
       borderRadius: {
         lg: "var(--radius)",
