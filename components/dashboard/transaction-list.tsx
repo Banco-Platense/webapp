@@ -88,11 +88,13 @@ export function TransactionList({ transactions, walletId, isLoading }: Transacti
 
   const getTransactionDisplayText = (transaction: EnhancedTransaction) => {
     if (transaction.type === "EXTERNAL_DEBIN") {
-      return "Debin"
+      // Display the original description for debin transactions
+      return transaction.description
     }
-    
+
     if (transaction.type === "EXTERNAL_TOPUP") {
-      return "Top-up"
+      // Display the original description for top-up transactions
+      return transaction.description
     }
     
     if (transaction.type === "P2P") {

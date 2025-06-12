@@ -50,8 +50,7 @@ export function BalanceCard({ balance, walletId, isLoading }: BalanceCardProps) 
         </p>
         <div className="flex items-center justify-between mt-2 p-2 bg-gray-50 rounded-md border">
           <div className="flex-1">
-            <p className="text-xs text-muted-foreground">Wallet ID</p>
-            <p className="text-sm font-mono text-gray-700 break-all">{walletId}</p>
+            <p className="text-sm font-mono text-gray-700 break-all">{`WalletId: ${walletId}`}</p>
           </div>
           <Button
             variant="ghost"
