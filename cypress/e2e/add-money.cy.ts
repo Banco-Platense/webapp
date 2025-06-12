@@ -14,7 +14,7 @@ describe('Add Money Page', () => {
   it('displays add money form', () => {
     cy.get('input#amount').should('be.visible');
     cy.contains('Source');
-    cy.get('button[type="submit"]').contains('Add Money');
+    cy.get('button[type="submit"]').contains('Send DEBIN Request');
   });
 
   it('shows error on invalid amount', () => {
@@ -30,36 +30,36 @@ describe('Add Money Page', () => {
   });
 
   it('shows error on server 400 response', () => {
-    cy.intercept('POST', '**/wallets/transactions/topup', {
+    cy.intercept('POST', '**/wallets/transactions/debin', {
       statusCode: 400,
       body: { message: 'Invalid topup amount' }
-    }).as('topupError');
+    }).as('debinError');
     cy.get('input#amount').type('50');
     cy.get('button[type="submit"]').click();
-    cy.wait('@topupError');
+    cy.wait('@debinError');
     cy.contains('Failed to add money. Please try again.').should('be.visible');
     cy.url().should('include', '/dashboard/add-money');
   });
 
   it('shows error on server 500 response', () => {
-    cy.intercept('POST', '**/wallets/transactions/topup', {
+    cy.intercept('POST', '**/wallets/transactions/debin', {
       statusCode: 500,
       body: {}
-    }).as('topupError500');
+    }).as('debinError500');
     cy.get('input#amount').type('50');
     cy.get('button[type="submit"]').click();
-    cy.wait('@topupError500');
+    cy.wait('@debinError500');
     cy.contains('Failed to add money. Please try again.').should('be.visible');
   });
 
   it('redirects to dashboard on successful top-up', () => {
-    cy.intercept('POST', '**/wallets/transactions/topup', {
+    cy.intercept('POST', '**/wallets/transactions/debin', {
       statusCode: 200,
       body: {}
-    }).as('topupRequest');
+    }).as('debinRequest');
     cy.get('input#amount').type('50');
     cy.get('button[type="submit"]').click();
-    cy.wait('@topupRequest');
+    cy.wait('@debinRequest');
     cy.url().should('include', '/dashboard');
   });
 }); 

@@ -40,8 +40,8 @@ export default function AddMoneyPage() {
     }
 
     try {
-      // Create top-up transaction
-      await apiRequest(`/wallets/transactions/topup`, {
+      // Create debin transaction
+      await apiRequest(`/wallets/transactions/debin`, {
         token,
         method: "POST",
         body: JSON.stringify({
@@ -95,7 +95,7 @@ export default function AddMoneyPage() {
                 {/* optional source selector */}
               </div>
               <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
-                {isLoading ? "Processing..." : "Add Money"}
+                {isLoading ? "Processing..." : "Send DEBIN Request"}
               </Button>
             </form>
           </CardContent>
