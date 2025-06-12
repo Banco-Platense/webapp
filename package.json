@@ -9,7 +9,12 @@
     "lint": "next lint",
     "cy:open": "cypress open",
     "cy:run": "wait-on http://localhost:3000 && cypress run",
-    "test:appium": "wdio run wdio.conf.cjs"
+    "test:appium": "wdio run wdio.conf.fast.cjs",
+    "test:appium:core": "wdio run wdio.conf.fast.cjs --spec='e2e/appium/send-money.spec.js' --spec='e2e/appium/login.spec.js'",
+    "test:appium:original": "wdio run wdio.conf.cjs",
+    "test:appium:validate": "./scripts/validate-appium.sh",
+    "appium:doctor": "appium-doctor --android",
+    "emulator:start": "emulator -avd Appium_Test_Device -no-snapshot-save -no-boot-anim -gpu swiftshader_indirect"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -72,6 +77,8 @@
     "@wdio/mocha-framework": "^8.17.0",
     "@wdio/spec-reporter": "^8.17.0",
     "appium": "^2.19.0",
+    "appium-uiautomator2-driver": "^4.2.3",
+    "chromedriver": "^137.0.3",
     "cypress": "^14.0.0",
     "eslint": "^9.27.0",
     "eslint-config-next": "^15.3.2",
