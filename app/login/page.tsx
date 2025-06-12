@@ -47,8 +47,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cream p-4">
-      <Card className="w-full max-w-md border-taupe">
+    <div className="min-h-screen flex items-center justify-center p-4 relative bg-cream">
+      {/* Background image with fade effect */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-45"
+        style={{
+          backgroundImage: "url('/background.jpg')",
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-cream/20 via-white/25 to-lightgold/15" />
+      <Card className="w-full max-w-md border-taupe relative z-10 bg-white/95 backdrop-blur-sm shadow-2xl">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Image 
@@ -80,7 +88,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link href="#" className="text-sm text-mediumbrown hover:underline">
+                <Link href="#" className="text-sm text-darkgold hover:text-gold hover:underline transition-colors duration-200">
                   Forgot password?
                 </Link>
               </div>
@@ -93,7 +101,7 @@ export default function LoginPage() {
                 className="border-taupe"
               />
             </div>
-            <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-gradient-to-r from-mediumbrown to-darkgold hover:from-mediumbrown/90 hover:to-richgold border border-gold/20" disabled={isLoading}>
               {isLoading ? "Logging in..." : "Login"}
             </Button>
           </form>
@@ -101,7 +109,7 @@ export default function LoginPage() {
         <CardFooter className="flex justify-center">
           <div className="text-sm text-center">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-mediumbrown hover:underline">
+            <Link href="/register" className="text-darkgold hover:text-gold hover:underline transition-colors duration-200">
               Register
             </Link>
           </div>

@@ -114,7 +114,7 @@ export default function AddMoneyPage() {
                   Enter the CBU of the person you want to request money from via DEBIN.
                 </p>
               </div>
-              <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-gradient-to-r from-mediumbrown to-darkgold hover:from-mediumbrown/90 hover:to-richgold border border-gold/20" disabled={isLoading}>
                 {isLoading ? "Processing..." : "Send DEBIN Request"}
               </Button>
             </form>
