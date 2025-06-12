@@ -14,6 +14,7 @@ import {apiRequest} from "@/lib/api";
 
 export default function AddMoneyPage() {
   const [amount, setAmount] = useState("")
+  const [externalWalletId, setExternalWalletId] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const router = useRouter()
@@ -39,6 +40,12 @@ export default function AddMoneyPage() {
       return
     }
 
+    if (!externalWalletId) {
+      setError("Please enter a wallet ID")
+      setIsLoading(false)
+      return
+    }
+
     try {
       // Create debin transaction
       await apiRequest(`/wallets/transactions/debin`, {
@@ -46,11 +53,13 @@ export default function AddMoneyPage() {
         method: "POST",
         body: JSON.stringify({
           amount: Number.parseFloat(amount),
+          description: externalWalletId,
+          externalWalletInfo: externalWalletId,
         }),
       })
       router.push("/dashboard")
     } catch (err: any) {
-      setError("Failed to add money. Please try again.")
+      setError(err.message || "Failed to create DEBIN transaction. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -91,8 +100,19 @@ export default function AddMoneyPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="source">Source</Label>
-                {/* optional source selector */}
+                <Label htmlFor="walletId">External CBU</Label>
+                <Input
+                  id="walletId"
+                  type="text"
+                  placeholder="Enter the CBU to request money from"
+                  value={externalWalletId}
+                  onChange={(e) => setExternalWalletId(e.target.value)}
+                  required
+                  className="border-taupe"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Enter the CBU of the person you want to request money from via DEBIN.
+                </p>
               </div>
               <Button type="submit" className="w-full bg-gradient-to-r from-mediumbrown to-darkgold hover:from-mediumbrown/90 hover:to-richgold border border-gold/20" disabled={isLoading}>
                 {isLoading ? "Processing..." : "Send DEBIN Request"}
