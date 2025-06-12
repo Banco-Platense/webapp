@@ -9,13 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useAuth } from "@/context/auth-context"
 import {apiRequest} from "@/lib/api";
 
 export default function AddMoneyPage() {
   const [amount, setAmount] = useState("")
-  const [source, setSource] = useState("card")
   const [externalWalletId, setExternalWalletId] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
@@ -42,43 +40,26 @@ export default function AddMoneyPage() {
       return
     }
 
-    if (source === "debin") {
-      if (!externalWalletId) {
-        setError("Please enter a wallet ID")
-        setIsLoading(false)
-        return
-      }
-      try {
-        // Delegate DEBIN to API, which calls the external mock internally
-        await apiRequest(`/wallets/transactions/debin`, {
-          token,
-          method: "POST",
-          body: JSON.stringify({
-            amount: Number.parseFloat(amount),
-            description: externalWalletId,
-            externalWalletInfo: externalWalletId,
-          }),
-        })
-        router.push("/dashboard")
-      } catch (err: any) {
-        setError(err.message || "Failed to create DEBIN transaction. Please try again.")
-      } finally {
-        setIsLoading(false)
-      }
+    if (!externalWalletId) {
+      setError("Please enter a wallet ID")
+      setIsLoading(false)
       return
     }
 
     try {
-      const transactionData = {amount, description: source, externalWalletInfo: source}
-      if (source === "debin") {
-        await apiRequest(`/wallets/transactions/debin`, {token, method: "POST", body: JSON.stringify(transactionData)})
-      } else {
-        await apiRequest(`/wallets/transactions/topup`, {token, method: "POST", body: JSON.stringify(transactionData)})
-      }
-
+      // Create DEBIN transaction
+      await apiRequest(`/wallets/transactions/debin`, {
+        token,
+        method: "POST",
+        body: JSON.stringify({
+          amount: Number.parseFloat(amount),
+          description: externalWalletId,
+          externalWalletInfo: externalWalletId,
+        }),
+      })
       router.push("/dashboard")
-    } catch (err) {
-      setError("Failed to add money. Please try again.")
+    } catch (err: any) {
+      setError(err.message || "Failed to create DEBIN transaction. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -94,7 +75,7 @@ export default function AddMoneyPage() {
         <Card className="border-taupe">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center text-deepbrown">Add Money</CardTitle>
-            <CardDescription className="text-center">Add funds to your account from external sources</CardDescription>
+            <CardDescription className="text-center">Request funds from another wallet via DEBIN</CardDescription>
           </CardHeader>
           <CardContent>
             <form noValidate onSubmit={handleSubmit} className="space-y-4">
@@ -119,44 +100,22 @@ export default function AddMoneyPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Source</Label>
-                <RadioGroup value={source} onValueChange={setSource} className="flex flex-col space-y-2">
-                  <div className="flex items-center space-x-2 rounded-md border p-3 border-taupe">
-                    <RadioGroupItem value="card" id="card" />
-                    <Label htmlFor="card" className="flex-1 cursor-pointer">
-                      Credit/Debit Card
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2 rounded-md border p-3 border-taupe">
-                    <RadioGroupItem value="bank" id="bank" />
-                    <Label htmlFor="bank" className="flex-1 cursor-pointer">
-                      Bank Account
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2 rounded-md border p-3 border-taupe">
-                    <RadioGroupItem value="debin" id="debin" />
-                    <Label htmlFor="debin" className="flex-1 cursor-pointer">
-                      DEBIN Request
-                    </Label>
-                  </div>
-                </RadioGroup>
+                <Label htmlFor="walletId">External CBU</Label>
+                <Input
+                  id="walletId"
+                  type="text"
+                  placeholder="Enter the CBU to request money from"
+                  value={externalWalletId}
+                  onChange={(e) => setExternalWalletId(e.target.value)}
+                  required
+                  className="border-taupe"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Enter the CBU of the person you want to request money from via DEBIN.
+                </p>
               </div>
-              {source === "debin" && (
-                <div className="space-y-2">
-                  <Label htmlFor="walletId">Wallet ID</Label>
-                  <Input
-                    id="walletId"
-                    type="text"
-                    placeholder="Enter external wallet ID"
-                    value={externalWalletId}
-                    onChange={(e) => setExternalWalletId(e.target.value)}
-                    required
-                    className="border-taupe"
-                  />
-                </div>
-              )}
               <Button type="submit" className="w-full bg-mediumbrown hover:bg-mediumbrown/90" disabled={isLoading}>
-                {isLoading ? "Processing..." : "Add Money"}
+                {isLoading ? "Processing..." : "Send DEBIN Request"}
               </Button>
             </form>
           </CardContent>
