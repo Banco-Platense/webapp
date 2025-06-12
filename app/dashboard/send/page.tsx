@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useAuth } from "@/context/auth-context"
 import {apiRequest} from "@/lib/api";
 
@@ -16,10 +17,14 @@ export default function SendMoneyPage() {
   const [recipient, setRecipient] = useState("")
   const [amount, setAmount] = useState("")
   const [note, setNote] = useState("")
+  const [recipientType, setRecipientType] = useState<"walletId" | "username">("walletId")
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const router = useRouter()
   const { token, isAuthenticated } = useAuth()
+
+  // UUID regex pattern
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
   // Redirect if not authenticated
   if (typeof window !== "undefined" && !isAuthenticated) {
@@ -29,6 +34,17 @@ export default function SendMoneyPage() {
   useEffect(() => {
     setIsLoading(false)
   }, [token]);
+
+  // Auto-detect recipient type based on UUID format
+  useEffect(() => {
+    if (recipient.trim()) {
+      if (uuidRegex.test(recipient.trim())) {
+        setRecipientType("walletId")
+      } else {
+        setRecipientType("username")
+      }
+    }
+  }, [recipient, uuidRegex])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,7 +57,15 @@ export default function SendMoneyPage() {
       return
     }
 
-    const transactionData = {amount, description: note, receiverWalletId: recipient}
+    const transactionData: { amount: number; description: string; receiverWalletId?: string; receiverUsername?: string } = {
+      amount: parseFloat(amount),
+      description: note
+    }
+    if (recipientType === "walletId") {
+      transactionData.receiverWalletId = recipient
+    } else {
+      transactionData.receiverUsername = recipient
+    }
     try {
       await apiRequest(`/wallets/transactions/p2p`, {token, method: "POST", body: JSON.stringify(transactionData)})
 
@@ -72,16 +96,21 @@ export default function SendMoneyPage() {
                 <div className="p-3 text-sm bg-red-100 border border-red-400 text-red-700 rounded">{error}</div>
               )}
               <div className="space-y-2">
-                <Label htmlFor="recipient">Recipient Email or ID</Label>
+                <Label htmlFor="recipient">Recipient</Label>
                 <Input
                   id="recipient"
                   type="text"
-                  placeholder="recipient walletId"
+                  placeholder={"recipient walletId or username"}
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
                   required
                   className="border-taupe"
                 />
+                {recipient && (
+                  <p className="text-sm text-gray-600">
+                    Detected as: {recipientType === "walletId" ? "Wallet ID (UUID format)" : "Username"}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="amount">Amount</Label>
